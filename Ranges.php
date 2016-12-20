@@ -37,11 +37,11 @@ class Ranges {
         $this->count = 0;
         usort($this->ranges, array($this, 'rSort'));
         for ($i = 0; $i < (count($this->ranges) - 1); $i++) {
-            if ($this->ranges[$i + 1][0] <= ($this->ranges[$i][1] + 1)) { 
+            if ($this->ranges[$i + 1][0] <= ($this->ranges[$i][1] + 1)) {
                 $k = $i + 1;
                 $max = max($this->ranges[$i][1], $this->ranges[$k][1]);
                 while ($k < (count($this->ranges) - 1)) {
-                    if ($this->ranges[$k + 1][0] <= $this->ranges[$k][1]) {
+                    if ($this->ranges[$k + 1][0] <= $this->ranges[$k][1] + 1) {
                         $k++;
                         $max = max($max, $this->ranges[$k][1]);
                     } else {
@@ -51,7 +51,8 @@ class Ranges {
                 $this->ranges[$i][1] = $max;
                 foreach (range($i + 1, $k) as $key) {
                     unset($this->ranges[$key]);
-                } 
+                }
+                $this->ranges = array_values($this->ranges);
             }
         }
         foreach ($this->ranges as $r) {
